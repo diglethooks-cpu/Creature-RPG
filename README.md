@@ -1,25 +1,34 @@
 # Wildlight — A Cozy Creature Adventure
 
-Wildlight is an original creature-collecting RPG prototype designed for desktop and mobile browsers.
+Wildlight is an original creature-collecting RPG built for desktop and mobile browsers. This rework is focused on making exploration and visible creatures the main experience—not a dialogue-led text adventure.
 
-## Run it
+## Play
 
-Open `index.html` in a modern browser, or publish the repository with GitHub Pages. Save data is stored locally in the browser on the device where you play.
+Open the [GitHub Pages build](https://diglethooks-cpu.github.io/Creature-RPG/) or run the repository with any static web server. Progress is saved locally in the browser on the device where you play.
 
-## Current build
+## Current rework
 
-The current rebuild moves the project toward a soft, cozy isometric adventure:
+- Large connected isometric world spanning five regions: Sunmeadow, Whisperwood, Tideglass Coast, Emberfall Ridge, and Frostveil Peaks
+- Real-time movement with a camera that follows the explorer, tap-to-walk, keyboard support, and a mobile analog joystick
+- Roaming wild creatures that wander through their home habitats and return to the world over time
+- **40 original creature species**, eight elemental affinities, 26 moves, rarity levels, stats, and five evolution lines
+- Turn-based encounters, move selection, type matchups, lure-based recruiting, experience, leveling, and evolution
+- Six-creature party, collection overflow, field guide, region map, and local save/load
+- Customizable explorer appearance and three starter companions
+- A soft storybook palette and illustrated isometric scenery
 
-- Isometric, hand-drawn canvas world with layered scenery, cottages, trees, flowers, rocks, and soft colors
-- Customizable explorer: name, skin tone, hair, and outfit
-- Three connected areas: Sunmeadow Village, Goldenleaf Meadow, and Whisperwood
-- Original creatures visibly roaming the environment
-- Walk up to creatures to begin encounters
-- Turn-based creature battles, individual moves, recruitment, experience, and leveling
-- Rowan NPC conversation and an introductory field-guide quest
-- Party management, satchel, region guide, and local save/load
-- Keyboard controls, touch D-pad, and tap-to-walk support
+## Controls
 
-## Development notes
+- **Desktop:** WASD or arrow keys to move; E or Space to interact; click/tap the ground to walk there.
+- **Mobile:** Use the on-screen joystick to move, tap the world to walk, and use the Interact button near a creature.
 
-This is an actively developing prototype, not a finished commercial game. The current focus is improving the isometric presentation, creature animation and behaviors, battle depth, world content, and mobile playtesting.
+## Project structure
+
+- `index.html` — game interface and overlays
+- `styles.css` — responsive desktop/mobile interface
+- `src/creatures.js` — creature species, regions, types, and moves
+- `src/game.js` — world generation, rendering, movement, encounters, battles, and saves
+
+## Development status
+
+This is a substantial playable prototype and an active work in progress—not a finished commercial game. The Figma rework board documents the visual direction and HUD layout. Next priorities are deeper world landmarks and interiors, richer individual creature animations/art, quest and progression depth, and hands-on mobile playtesting.
