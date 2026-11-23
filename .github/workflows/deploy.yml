@@ -23,6 +23,10 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Validate JavaScript modules
+        run: |
+          node --input-type=module --check < src/creatures.js
+          node --input-type=module --check < src/game.js
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
