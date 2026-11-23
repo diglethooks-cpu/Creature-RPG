@@ -1,137 +1,89 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#dce9d2"><title>Wildlight — A Cozy Creature Adventure</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&display=swap');
-:root{--ink:#40584a;--muted:#829487;--cream:#fffaf0;--leaf:#779b70;--deep:#456c54;--pink:#e7a9a0;--gold:#e7c77e;--line:#e8e5d8}
-*{box-sizing:border-box}body{margin:0;background:#dce9d2;color:var(--ink);font-family:Nunito,system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:16px}button{font:inherit;color:inherit;cursor:pointer;border:0}button:focus-visible{outline:3px solid #e4b968;outline-offset:2px}
-.shell{width:min(1220px,100%);background:var(--cream);border:5px solid #f7f4e8;border-radius:25px;overflow:hidden;box-shadow:0 22px 70px #59745a40}
-.top{height:66px;background:#eff3e6;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid #e1e7d9}.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.08em}.brand-mark{width:35px;height:35px;border-radius:13px;background:#f0d68f;display:grid;place-items:center;font-size:20px}.brand small{display:block;font-size:9px;letter-spacing:.14em;color:#91a18e}.stats{display:flex;gap:16px;font-size:12px;font-weight:900}.stats span{background:#fffaf0;border:1px solid #e7e8dc;border-radius:20px;padding:7px 11px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;min-height:690px}.stage{padding:16px;min-width:0}.stage-head{display:flex;justify-content:space-between;align-items:center;padding:0 4px 11px}.stage-head h1{font-size:20px;margin:0}.stage-head p{font-size:11px;color:var(--muted);margin:2px 0 0}.weather{font-size:11px;font-weight:800;color:#9b9c70}
-.frame{position:relative;background:#b9d5a7;border:5px solid #f0eadb;border-radius:18px;overflow:hidden;box-shadow:0 9px 25px #4e76512b}canvas#world{display:block;width:100%;height:auto;aspect-ratio:960/640;touch-action:none}
-.world-hud{position:absolute;left:12px;top:11px;display:flex;gap:6px;pointer-events:none}.pill{background:#fffaf0e8;border:1px solid #fff;border-radius:15px;padding:6px 10px;font-size:10px;font-weight:900;box-shadow:0 2px 5px #35583b18}
-.toast{position:absolute;left:50%;bottom:12px;transform:translate(-50%,12px);background:#405e4c;color:white;border-radius:20px;padding:8px 15px;font-size:11px;font-weight:800;opacity:0;transition:.2s;pointer-events:none;white-space:nowrap}.toast.show{opacity:1;transform:translate(-50%,0)}
-.controls{display:none;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,42px);gap:5px;justify-content:center;margin:12px auto 2px}.controls button{background:#e7efdf;border:1px solid #d4e0cd;border-radius:13px;font-size:18px;font-weight:900;touch-action:none;box-shadow:0 3px 0 #c8d8c1}.controls button:active{transform:translateY(2px);box-shadow:none}.controls .up{grid-column:2}.controls .left{grid-column:1;grid-row:2}.controls .down{grid-column:2;grid-row:2}.controls .right{grid-column:3;grid-row:2}
-.hint{text-align:center;color:#96a28f;font-size:10px;font-weight:800;margin-top:9px;letter-spacing:.05em}
-aside{background:#f2f0e5;border-left:1px solid #e5e4d8;padding:14px;display:flex;flex-direction:column;gap:10px}.panel{background:#fffdf7;border:1px solid var(--line);border-radius:15px;padding:12px}.panel-title{font-size:10px;letter-spacing:.1em;font-weight:900;color:#829487;margin-bottom:9px;display:flex;justify-content:space-between}.companion{display:flex;align-items:center;gap:10px}.avatar-icon{width:57px;height:57px;border-radius:17px;background:#edf3e6;display:grid;place-items:center;overflow:hidden}.avatar-icon canvas{width:57px;height:57px}.companion b{display:block;font-size:13px}.companion small{font-size:10px;color:#91a092}.meter{height:7px;background:#e8eee3;border-radius:9px;overflow:hidden;margin:6px 0 3px}.meter i{height:100%;display:block;background:#8ab57b;border-radius:9px}.quest{font-size:11px;line-height:1.45;color:#819083}.quest b{display:block;color:var(--ink);font-size:12px;margin-bottom:3px}.quick{display:grid;grid-template-columns:1fr 1fr;gap:7px}.quick button{background:#f2f3e9;border:1px solid #e6e8dc;border-radius:11px;padding:9px 7px;text-align:left;font-size:10px;font-weight:900}.quick button:hover{background:#e9f1e4}.quick strong{display:block;font-size:18px;margin-bottom:2px}.party-entry{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid #f0eee5}.party-entry:first-of-type{border-top:0}.party-entry .dot{width:30px;height:30px;border-radius:10px;background:#edf3e7;display:grid;place-items:center;font-size:17px}.party-entry b{font-size:10px}.party-entry small{display:block;font-size:9px;color:#96a094}
-.overlay{display:none;position:fixed;inset:0;z-index:10;background:#354c3dcc;place-items:center;padding:14px}.overlay.open{display:grid}.modal{width:min(620px,100%);max-height:92vh;overflow:auto;background:#fffaf0;border:5px solid #f5f0df;border-radius:22px;padding:19px;box-shadow:0 22px 70px #243d2c70}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.modal h2{font-size:20px;margin:0}.close{width:32px;height:32px;border-radius:12px;background:#eeeede;font-size:20px}.muted{font-size:12px;line-height:1.55;color:#859285}.primary,.secondary{border-radius:12px;padding:10px 15px;font-size:11px;font-weight:900}.primary{background:#5d8765;color:#fff}.secondary{background:#e9ecdf}.choice-row{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 14px}.choice{border:2px solid #e8e6da;background:#fffdf8;border-radius:11px;padding:8px 12px;font-size:11px;font-weight:900}.choice.selected{border-color:#88ad7d;background:#edf4e8}.custom-grid{display:grid;grid-template-columns:145px 1fr;gap:15px;align-items:start}.preview{background:#e8f0df;border-radius:18px;padding:8px;display:grid;place-items:center}.preview canvas{width:125px;height:155px}.field-label{font-size:10px;font-weight:900;color:#849184;margin:8px 0 5px}.name-input{width:100%;border:1px solid #e3e3d6;border-radius:10px;padding:10px;background:white;font:inherit;font-size:12px;color:var(--ink)}
-.list{display:grid;gap:8px}.creature-card{display:flex;align-items:center;gap:10px;background:#fffdf8;border:1px solid #ebe8dc;border-radius:13px;padding:9px}.creature-card .art{width:43px;height:43px;border-radius:13px;background:#edf3e7;display:grid;place-items:center}.creature-card b{font-size:12px}.creature-card small{display:block;font-size:10px;color:#8c9a8c}.creature-card button{margin-left:auto}
-.battle-layout{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.battle-mon{background:#eff3e8;border-radius:16px;padding:10px;text-align:center}.battle-mon canvas{width:100%;height:110px}.battle-mon b{font-size:12px}.battle-log{background:#f0ecdf;border-radius:12px;padding:11px;font-size:12px;min-height:44px}.move-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.move{background:#fff;border:1px solid #e9e5d8;border-radius:11px;padding:10px;text-align:left;font-size:11px;font-weight:900}.move small{display:block;font-size:9px;color:#8c9a8c;margin-top:2px}
-@media(max-width:780px){body{padding:0;background:#fffaf0}.shell{border:0;border-radius:0;min-height:100vh}.top{height:58px;padding:0 12px}.layout{grid-template-columns:1fr;min-height:0}.stage{padding:10px}.stage-head h1{font-size:17px}aside{display:grid;grid-template-columns:1fr 1fr;border:0;border-top:1px solid #e5e4d8;padding:10px;gap:8px}.panel{padding:10px}.party-panel{grid-column:1/-1}.controls{display:grid}.stats{gap:5px;font-size:10px}.stats span{padding:6px 8px}}
-@media(max-width:390px){aside{grid-template-columns:1fr}.party-panel{grid-column:auto}.custom-grid{grid-template-columns:1fr}.preview canvas{height:125px}}
-</style></head>
-<body><div class="shell">
-<header class="top"><div class="brand"><span class="brand-mark">✿</span><div>WILDLIGHT<small>A LITTLE WORLD OF WONDERS</small></div></div><div class="stats"><span>✧ <b id="coins">35</b></span><span>♡ <b id="found">0</b> FOUND</span><span>DAY <b id="day">01</b></span></div></header>
-<div class="layout"><main class="stage"><div class="stage-head"><div><h1 id="area">Sunmeadow Village</h1><p id="subtitle">A warm breeze wanders through the village.</p></div><div class="weather" id="weather">☀ SUNNY</div></div>
-<div class="frame"><canvas id="world" width="960" height="640"></canvas><div class="world-hud"><span class="pill" id="regionPill">SUNMEADOW</span><span class="pill" id="objective">✿ Find your first friend</span></div><div class="toast" id="toast"></div></div>
-<div class="controls"><button class="up" data-dir="up">▲</button><button class="left" data-dir="left">◀</button><button class="down" data-dir="down">▼</button><button class="right" data-dir="right">▶</button></div><div class="hint">WASD / ARROWS TO WALK · WALK UP TO CREATURES TO MEET THEM</div></main>
-<aside><section class="panel"><div class="panel-title">YOUR COMPANION <span id="lv">LV 03</span></div><div class="companion"><div class="avatar-icon"><canvas id="compIcon" width="57" height="57"></canvas></div><div style="flex:1"><b id="compName">Mosslet</b><small id="compType">Verdant · Curious</small><div class="meter"><i id="compHp" style="width:100%"></i></div><small id="compVitals">24 / 24 VIT</small></div></div></section>
-<section class="panel"><div class="panel-title">LITTLE ADVENTURE <span>QUEST</span></div><div class="quest"><b id="questTitle">A Field Guide Begins</b><span id="questText">Meet Rowan near the village garden.</span></div></section>
-<section class="panel"><div class="panel-title">YOUR BACKPACK</div><div class="quick"><button id="creaturesBtn"><strong>✿</strong>Creatures</button><button id="mapBtn"><strong>⌖</strong>Explore map</button><button id="bagBtn"><strong>♧</strong>Satchel</button><button id="saveBtn"><strong>♡</strong>Save game</button></div></section>
-<section class="panel party-panel"><div class="panel-title">TRAVELING WITH YOU <span id="partyCount">1 / 6</span></div><div id="partyList"></div></section></aside></div></div>
-<div class="overlay open" id="custom"><div class="modal"><div class="modal-head"><div><span class="muted">WELCOME TO SUNMEADOW</span><h2>Make yourself at home</h2></div></div><p class="muted">Every adventure should feel like yours. Pick a look for your little explorer.</p><div class="custom-grid"><div class="preview"><canvas id="preview" width="180" height="210"></canvas></div><div><div class="field-label">YOUR NAME</div><input class="name-input" id="playerName" maxlength="14" value="Sage"><div class="field-label">SKIN TONE</div><div class="choice-row" id="skinChoices"></div><div class="field-label">HAIR STYLE</div><div class="choice-row" id="hairChoices"></div><div class="field-label">OUTFIT</div><div class="choice-row" id="outfitChoices"></div></div></div><div style="display:flex;justify-content:flex-end;margin-top:14px"><button class="primary" id="start">Let's explore! ✿</button></div></div></div>
-<div class="overlay" id="modal"><div class="modal"><div class="modal-head"><h2 id="modalTitle">Field Guide</h2><button class="close" id="closeModal">×</button></div><div id="modalBody"></div></div></div>
-<div class="overlay" id="battle"><div class="modal"><div class="modal-head"><div><span class="muted">A LITTLE WILD ENCOUNTER</span><h2 id="battleTitle">A new friend appears!</h2></div><button class="close" id="battleClose" style="display:none">×</button></div><div class="battle-layout"><div class="battle-mon"><canvas id="enemyArt" width="220" height="120"></canvas><b id="enemyName">Pipkin · Lv 02</b><div class="meter"><i id="enemyHp" style="width:100%;background:#dba28c"></i></div><small id="enemyVitals" class="muted">16 / 16 VIT</small></div><div class="battle-mon"><canvas id="allyArt" width="220" height="120"></canvas><b id="allyName">Mosslet · Lv 03</b><div class="meter"><i id="allyHp" style="width:100%"></i></div><small id="allyVitals" class="muted">24 / 24 VIT</small></div></div><div class="battle-log" id="battleLog">A wild creature is curious about you!</div><div class="move-grid" id="moveGrid"></div><div style="display:flex;gap:8px;margin-top:9px"><button class="secondary" id="catchBtn" style="flex:1">♡ Offer a treat</button><button class="secondary" id="runBtn" style="flex:1">Head out</button></div></div></div>
-<script>
-(()=>{
-const $=id=>document.getElementById(id),world=$('world'),ctx=world.getContext('2d'),W=world.width,H=world.height;
-const colors={skin:['#f2c9a7','#d99d79','#ad7056','#754b3d'],hair:['#594438','#302b2b','#bd8752','#a85f53','#d7b66f'],outfit:['#7da58a','#d68f88','#8299bc','#c49b67','#a18bb5']};
-let look={name:'Sage',skin:0,hair:0,outfit:0},player={x:11,y:10,dir:0,step:0},party=[],wild=[],active=null,encounter=null,coins=35,day=1,found=0,quest=0,dialogue=null,moveTimer=0,keys={},lastTime=0,toastTimer=0;
-const creatures={
- Mosslet:{color:'#8fba79',belly:'#dce9b8',accent:'#5f8e62',type:'Verdant',hp:24,atk:6,def:5,shape:'sprout',moves:[['Leaflet',7],['Pollen Puff',9],['Root Wiggle',6]]},
- Embercub:{color:'#e69b75',belly:'#ffe0b3',accent:'#b85f4d',type:'Cinder',hp:22,atk:8,def:4,shape:'cub',moves:[['Warm Nudge',7],['Cinder Pop',10],['Tail Flick',8]]},
- Bubbloon:{color:'#86c6d0',belly:'#e1f5ed',accent:'#4f9ea9',type:'Tide',hp:27,atk:6,def:6,shape:'blob',moves:[['Bubble Tap',7],['Dew Drop',9],['Wave Wiggle',6]]},
- Pipkin:{color:'#d6a36d',belly:'#f8dfb6',accent:'#9a7049',type:'Meadow',hp:17,atk:5,def:3,shape:'bunny',moves:[['Hop Bonk',6],['Seed Toss',8]]},
- Glimmeray:{color:'#9f9bda',belly:'#e5defb',accent:'#7975b6',type:'Glimmer',hp:18,atk:7,def:3,shape:'moth',moves:[['Dusty Flutter',7],['Moonbeam',10]]},
- Thornit:{color:'#7fa77b',belly:'#dce5b9',accent:'#527b58',type:'Verdant',hp:21,atk:7,def:5,shape:'hedge',moves:[['Twig Tap',7],['Bramble Bop',10]]},
- Pebblit:{color:'#9eaaa8',belly:'#e4e5d9',accent:'#6c7c7b',type:'Stone',hp:24,atk:6,def:7,shape:'rock',moves:[['Pebble Pop',7],['Roll Along',9]]},
- Driftfin:{color:'#78b8c5',belly:'#d9eff0',accent:'#478c9b',type:'Tide',hp:20,atk:7,def:4,shape:'fish',moves:[['Fin Flick',7],['Sprinkle',9]]},
- Petalyn:{color:'#e6a6b5',belly:'#fff0d8',accent:'#bd718e',type:'Bloom',hp:19,atk:7,def:4,shape:'flower',moves:[['Petal Toss',8],['Sweet Scent',6]]}
-};
-const speciesKeys=Object.keys(creatures);
-const maps={
- village:{name:'Sunmeadow Village',sub:'A warm breeze wanders through the village.',theme:'village',spawn:[11,10],exits:[{x:21,y:9,to:'meadow',tx:2,ty:10,label:'Goldenleaf Meadow'}]},
- meadow:{name:'Goldenleaf Meadow',sub:'Tall grass sways and little paws rustle nearby.',theme:'meadow',spawn:[2,10],exits:[{x:1,y:10,to:'village',tx:20,ty:9,label:'Sunmeadow Village'},{x:21,y:8,to:'wood',tx:2,ty:11,label:'Whisperwood'}]},
- wood:{name:'Whisperwood',sub:'Dappled sunlight and secrets beneath old trees.',theme:'wood',spawn:[2,11],exits:[{x:1,y:11,to:'meadow',tx:20,ty:8,label:'Goldenleaf Meadow'}]}
-};
-let mapKey='village',map=maps[mapKey];
-let cameraX=0,cameraY=0;const iso=(x,y)=>({x:W/2+(x-y)*32-cameraX,y:110+(x+y)*16-cameraY});
-const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-function toast(s){$('toast').textContent=s;$('toast').classList.add('show');toastTimer=2.2}
-function drawDiamond(x,y,fill,stroke){let p=iso(x,y);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+32,p.y+16);ctx.lineTo(p.x,p.y+32);ctx.lineTo(p.x-32,p.y+16);ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
-function ellipse(x,y,rx,ry,c){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=c;ctx.fill()}
-function roundRect(x,y,w,h,r,c){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=c;ctx.fill()}
-function drawTree(x,y,kind=0){let p=iso(x,y),s=kind?1.0:1.12;ellipse(p.x,p.y+12,19,9,'#648c61');roundRect(p.x-5,p.y-39,10,48,4,'#9a7958');ellipse(p.x,p.y-40,24*s,25*s,kind?'#9dbb84':'#86ae7b');ellipse(p.x-12,p.y-48,15,16,kind?'#b3c994':'#a4c58c');ellipse(p.x+12,p.y-47,15,17,kind?'#8bab76':'#96bb83');ellipse(p.x-7,p.y-57,8,8,'#c8d8a7')}
-function drawHouse(x,y){let p=iso(x,y);ellipse(p.x,p.y+12,39,13,'#7b9d70');ctx.fillStyle='#f1d8aa';ctx.beginPath();ctx.moveTo(p.x-25,p.y-34);ctx.lineTo(p.x,p.y-48);ctx.lineTo(p.x+27,p.y-34);ctx.lineTo(p.x+27,p.y+2);ctx.lineTo(p.x,p.y+18);ctx.lineTo(p.x-25,p.y+2);ctx.closePath();ctx.fill();ctx.fillStyle='#c77e72';ctx.beginPath();ctx.moveTo(p.x-32,p.y-34);ctx.lineTo(p.x,p.y-61);ctx.lineTo(p.x+33,p.y-34);ctx.lineTo(p.x,p.y-17);ctx.closePath();ctx.fill();ctx.fillStyle='#8caa9b';ctx.fillRect(p.x-16,p.y-20,11,12);ctx.fillRect(p.x+6,p.y-20,11,12);ctx.fillStyle='#9a7457';ctx.fillRect(p.x-5,p.y-1,11,19);ellipse(p.x+20,p.y-46,4,4,'#f3d49b')}
-function drawFlower(x,y,c){let p=iso(x,y);ellipse(p.x,p.y+3,4,2,'#6d9862');for(let i=0;i<5;i++){let a=i*Math.PI*2/5;ellipse(p.x+Math.cos(a)*4,p.y-4+Math.sin(a)*4,3,3,c)}ellipse(p.x,p.y-4,2,2,'#e9ce7e')}
-function drawRock(x,y){let p=iso(x,y);ellipse(p.x,p.y+5,16,7,'#789482');ctx.beginPath();ctx.moveTo(p.x-12,p.y+1);ctx.lineTo(p.x-7,p.y-13);ctx.lineTo(p.x+5,p.y-18);ctx.lineTo(p.x+15,p.y-5);ctx.lineTo(p.x+11,p.y+4);ctx.closePath();ctx.fillStyle='#a9b6a4';ctx.fill();ctx.strokeStyle='#84998a';ctx.stroke()}
-function drawCreature(name,x,y,scale=1,bob=0){let d=creatures[name];if(!d)return;let p=iso(x,y),cx=p.x,cy=p.y-8+bob;ctx.save();ctx.translate(cx,cy);ctx.scale(scale,scale);ellipse(0,13,19,7,'#4d6f4a55');
-let c=d.color,b=d.belly,a=d.accent;
-if(d.shape==='moth'){ellipse(-15,-2,13,15,'#d8c8ec');ellipse(15,-2,13,15,'#d8c8ec');ellipse(-15,-2,8,11,'#f3e7fa');ellipse(15,-2,8,11,'#f3e7fa');ellipse(0,2,12,16,c);ellipse(0,7,7,8,b);ctx.strokeStyle=a;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-5,-10);ctx.quadraticCurveTo(-15,-23,-18,-18);ctx.moveTo(5,-10);ctx.quadraticCurveTo(15,-23,18,-18);ctx.stroke()}
-else if(d.shape==='fish'){ellipse(0,1,19,13,c);ctx.fillStyle=a;ctx.beginPath();ctx.moveTo(-16,0);ctx.lineTo(-29,-9);ctx.lineTo(-28,10);ctx.closePath();ctx.fill();ellipse(5,6,10,6,b);ellipse(11,-3,2.4,2.4,'#344b43');ellipse(12,-4,1,1,'white')}
-else if(d.shape==='rock'){ctx.beginPath();ctx.moveTo(-18,9);ctx.lineTo(-14,-9);ctx.lineTo(-3,-19);ctx.lineTo(12,-15);ctx.lineTo(20,4);ctx.lineTo(12,13);ctx.closePath();ctx.fillStyle=c;ctx.fill();ellipse(0,7,10,5,b);ellipse(7,-5,2,2,'#344b43');ellipse(-6,-5,2,2,'#344b43')}
-else if(d.shape==='flower'){ellipse(0,3,14,13,c);for(let i=0;i<6;i++){let a2=i*Math.PI/3;ellipse(Math.cos(a2)*12,Math.sin(a2)*12-12,8,8,c)}ellipse(0,-11,7,7,'#f0d782');ellipse(-5,2,2,2,'#344b43');ellipse(5,2,2,2,'#344b43')}
-else {ellipse(0,1,18,17,c);ellipse(0,8,12,9,b);
-if(d.shape==='bunny'){ellipse(-11,-14,6,13,c);ellipse(10,-14,6,13,c);ellipse(-11,-15,2,8,'#f2c7bb');ellipse(10,-15,2,8,'#f2c7bb')}
-if(d.shape==='cub'){ellipse(-12,-12,7,7,c);ellipse(12,-12,7,7,c);ellipse(0,-3,7,6,b)}
-if(d.shape==='sprout'||d.shape==='hedge'){ctx.strokeStyle=a;ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,-12);ctx.quadraticCurveTo(-9,-26,-14,-21);ctx.moveTo(0,-12);ctx.quadraticCurveTo(9,-27,15,-22);ctx.stroke();ellipse(-14,-22,5,3,'#a9c987');ellipse(15,-22,5,3,'#a9c987')}
-if(d.shape==='blob'){ellipse(-10,-12,7,9,c);ellipse(10,-12,7,9,c);ellipse(-9,-14,3,4,'#e4f8f4');ellipse(10,-14,3,4,'#e4f8f4')}
-ellipse(-6,-2,2.3,2.8,'#344b43');ellipse(7,-2,2.3,2.8,'#344b43');ctx.strokeStyle='#8d625a';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(1,5,3,0,Math.PI);ctx.stroke();ellipse(-13,4,4,2,'#e9a69a');ellipse(13,4,4,2,'#e9a69a')}
-ctx.restore()}
-function drawPlayer(){let p=iso(player.x,player.y),bounce=Math.sin(player.step)*2;ellipse(p.x,p.y+9,12,5,'#58724f66');ctx.save();ctx.translate(p.x,p.y-11+bounce);let skin=colors.skin[look.skin],hair=colors.hair[look.hair],out=colors.outfit[look.outfit];roundRect(-8,-8,16,19,6,out);ellipse(0,-16,9,10,skin);ellipse(-8,-20,4,5,hair);ellipse(8,-20,4,5,hair);ellipse(0,-24,10,5,hair);ellipse(-3,-16,1.3,1.6,'#40584a');ellipse(3,-16,1.3,1.6,'#40584a');roundRect(-7,8,5,7,2,'#846b58');roundRect(2,8,5,7,2,'#846b58');ctx.restore()}
-function terrain(x,y){let v=(x*7+y*11+x*y*3)%17;if(map.theme==='village'){if(x===0||y===0||x===23||y===15)return '#9fbd8b';if((x>5&&x<18&&y>5&&y<13)&&((x+y)%4===0))return '#d5c99d';return v<3?'#a8c992':'#b7d39e'}if(map.theme==='meadow'){if(v<3)return '#9fc58b';return v<7?'#c5d99e':'#b1cf91'}return v<5?'#8eb98b':v<9?'#a5c89a':'#96bd90'}
-const obstacles=new Set(),decoration=[],creatureSpawns=[];
-function buildMap(){obstacles.clear();decoration.length=0;creatureSpawns.length=0;
-for(let y=0;y<16;y++)for(let x=0;x<24;x++){if(x===0||y===0||x===23||y===15)obstacles.add(x+','+y)}
-if(mapKey==='village'){[[4,4],[5,4],[18,4],[19,4],[4,12],[19,12],[8,2],[9,2],[15,13]].forEach(([x,y])=>{obstacles.add(x+','+y);decoration.push({type:'tree',x,y})});decoration.push({type:'house',x:7,y:7},{type:'house',x:16,y:7},{type:'tree',x:3,y:8},{type:'tree',x:20,y:10});for(let x=9;x<15;x++)for(let y=8;y<11;y++)if((x+y)%2===0)decoration.push({type:'flower',x,y});decoration.push({type:'npc',x:12,y:6,name:'Rowan'})}
-if(mapKey==='meadow'){[[6,4],[7,4],[17,4],[18,5],[6,12],[18,12],[13,2],[14,2],[10,7]].forEach(([x,y])=>{obstacles.add(x+','+y);decoration.push({type:'tree',x,y})});for(let i=0;i<65;i++){let x=rnd(2,21),y=rnd(2,13);if(!obstacles.has(x+','+y))decoration.push({type:'flower',x,y,c:['#f2c0b3','#f3dc91','#f7e7d0'][rnd(0,2)]})}decoration.push({type:'rock',x:14,y:10})}
-if(mapKey==='wood'){[[4,3],[5,3],[6,4],[9,2],[10,2],[14,3],[15,3],[19,4],[20,5],[4,11],[5,12],[9,12],[15,12],[19,11]].forEach(([x,y])=>{obstacles.add(x+','+y);decoration.push({type:'tree',x,y,kind:1})});for(let i=0;i<35;i++){let x=rnd(2,21),y=rnd(2,13);decoration.push({type:'flower',x,y,c:'#d5c8ed'})}decoration.push({type:'rock',x:12,y:8},{type:'rock',x:13,y:8})}
-let count=mapKey==='meadow'?7:mapKey==='wood'?6:2;let available=mapKey==='meadow'?['Pipkin','Thornit','Petalyn','Glimmeray']:mapKey==='wood'?['Thornit','Glimmeray','Pebblit','Pipkin']:['Pipkin','Petalyn'];
-for(let i=0;i<count;i++){let x,y,tries=0;do{x=rnd(3,20);y=rnd(3,13);tries++}while((obstacles.has(x+','+y)||decoration.some(o=>o.x===x&&o.y===y&&o.type==='house'))&&tries<50);creatureSpawns.push({name:available[rnd(0,available.length-1)],x,y,phase:Math.random()*6.28,roam:0})}
-}
-function changeMap(k,x,y){mapKey=k;map=maps[k];player.x=x;player.y=y;player.step=0;buildMap();$('area').textContent=map.name;$('subtitle').textContent=map.sub;$('regionPill').textContent=map.name.toUpperCase();toast('Arrived at '+map.name)}
-function render(){cameraX=Math.max(0,Math.min(256,(W/2+(player.x-player.y)*32)-W/2));cameraY=Math.max(0,Math.min(78,(110+(player.x+player.y)*16)-H*.55));ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,mapKey==='wood'?'#c9dfbf':'#d8e9c8');sky.addColorStop(1,'#a8ca94');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
-for(let y=0;y<16;y++)for(let x=0;x<24;x++){let p=iso(x,y);drawDiamond(x,y,terrain(x,y),'#91b67f55');if(mapKey==='meadow'&&((x*3+y*5)%23===0))drawDiamond(x,y,'#d8dca1')}
-let actors=[];for(let d of decoration)actors.push({...d,depth:d.x+d.y});for(let c of creatureSpawns)actors.push({type:'creature',...c,depth:c.x+c.y+.1});actors.push({type:'player',depth:player.x+player.y+.2});
-actors.sort((a,b)=>a.depth-b.depth);
-for(let a of actors){if(a.type==='tree')drawTree(a.x,a.y,a.kind);else if(a.type==='house')drawHouse(a.x,a.y);else if(a.type==='flower')drawFlower(a.x,a.y,a.c||'#f1c5b2');else if(a.type==='rock')drawRock(a.x,a.y);else if(a.type==='npc'){let p=iso(a.x,a.y);ellipse(p.x,p.y+7,11,5,'#5b765266');ellipse(p.x,p.y-12,9,10,'#d8a17f');roundRect(p.x-8,p.y-8,16,17,5,'#a78db4');ellipse(p.x,p.y-21,10,5,'#6b5948');ctx.fillStyle='#fffaf0';ctx.font='bold 10px Nunito';ctx.textAlign='center';ctx.fillText('Rowan',p.x,p.y-39)}else if(a.type==='creature')drawCreature(a.name,a.x,a.y,1,Math.sin(a.phase+performance.now()/550)*2);else if(a.type==='player')drawPlayer()}
-let vignette=ctx.createRadialGradient(W/2,H/2,180,W/2,H/2,600);vignette.addColorStop(0,'#ffffff00');vignette.addColorStop(1,'#466d4c20');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
-let pp=iso(player.x,player.y);$('regionPill').textContent=map.name.toUpperCase();$('objective').textContent=quest===0?'✿ Meet Rowan near the garden':quest===1?'♡ Find a creature friend':'✧ Explore the paths';}
-function drawAvatar(c,scale=1){let x=c.canvas.width/2,y=c.canvas.height*.76;c.clearRect(0,0,c.canvas.width,c.canvas.height);c.save();c.translate(x,y);c.scale(scale,scale);c.fillStyle='#78956f55';c.beginPath();c.ellipse(0,0,24,8,0,0,Math.PI*2);c.fill();let skin=colors.skin[look.skin],hair=colors.hair[look.hair],out=colors.outfit[look.outfit];c.fillStyle=out;c.beginPath();c.roundRect(-17,-40,34,40,10);c.fill();c.fillStyle=skin;c.beginPath();c.arc(0,-55,19,0,Math.PI*2);c.fill();c.fillStyle=hair;c.beginPath();c.arc(0,-68,19,Math.PI,Math.PI*2);c.fill();c.beginPath();c.ellipse(-14,-58,6,12,-.3,0,Math.PI*2);c.ellipse(14,-58,6,12,.3,0,Math.PI*2);c.fill();c.fillStyle='#40584a';c.beginPath();c.arc(-6,-54,2,0,Math.PI*2);c.arc(6,-54,2,0,Math.PI*2);c.fill();c.restore()}
-function refresh(){let c=party[0];if(c){$('compName').textContent=c.name;$('compType').textContent=creatures[c.name].type+' · Level '+c.level;$('lv').textContent='LV '+String(c.level).padStart(2,'0');$('compVitals').textContent=c.hp+' / '+c.maxHp+' VIT';$('compHp').style.width=(100*c.hp/c.maxHp)+'%';drawCreatureIcon(c.name,$('compIcon'))}
-$('coins').textContent=coins;$('found').textContent=found;$('day').textContent=String(day).padStart(2,'0');$('partyCount').textContent=party.length+' / 6';$('partyList').innerHTML=party.map(c=>'<div class="party-entry"><span class="dot">'+symbol(c.name)+'</span><div><b>'+c.name+'</b><small>LV '+c.level+' · '+c.hp+'/'+c.maxHp+' VIT</small></div></div>').join('')||'<small class="muted">No companions yet.</small>';$('questTitle').textContent=quest===0?'A Field Guide Begins':quest===1?'A New Friend':'The World is Yours';$('questText').textContent=quest===0?'Meet Rowan in the village garden.':quest===1?'Find a creature wandering in Goldenleaf Meadow.':'Explore the regions and meet the creatures who live there.'}
-function symbol(n){return ({Mosslet:'🌱',Embercub:'🦊',Bubbloon:'🫧',Pipkin:'🐇',Glimmeray:'🦋',Thornit:'🌿',Pebblit:'🪨',Driftfin:'🐟',Petalyn:'🌸'})[n]||'✿'}
-function drawCreatureIcon(name,c){let d=creatures[name];let x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);x.save();x.translate(c.width/2,c.height/2+2);x.fillStyle=d.color;x.beginPath();x.ellipse(0,0,18,16,0,0,Math.PI*2);x.fill();x.fillStyle=d.belly;x.beginPath();x.ellipse(0,7,11,7,0,0,Math.PI*2);x.fill();x.fillStyle='#40584a';x.beginPath();x.arc(-6,-2,2,0,Math.PI*2);x.arc(6,-2,2,0,Math.PI*2);x.fill();x.restore()}
-function tryMove(dx,dy){if($('battle').classList.contains('open')||$('modal').classList.contains('open')||$('custom').classList.contains('open'))return;let nx=player.x+dx,ny=player.y+dy;player.dir=Math.atan2(dy,dx);if(nx<1||nx>22||ny<1||ny>14){let ex=map.exits.find(e=>Math.abs(e.x-player.x)<=1&&Math.abs(e.y-player.y)<=1);if(ex){changeMap(ex.to,ex.tx,ex.ty);return}return}if(obstacles.has(nx+','+ny))return;player.x=nx;player.y=ny;player.step+=1.3;for(let e of map.exits)if(Math.abs(nx-e.x)+Math.abs(ny-e.y)<=1){changeMap(e.to,e.tx,e.ty);return}
-let near=creatureSpawns.findIndex(c=>Math.abs(c.x-nx)+Math.abs(c.y-ny)<=1);if(near>=0){let c=creatureSpawns[near];if(Math.random()<.45||Math.abs(c.x-nx)+Math.abs(c.y-ny)===0){beginBattle(c,near);return}}
-let npc=decoration.find(o=>o.type==='npc'&&Math.abs(o.x-nx)+Math.abs(o.y-ny)<=1);if(npc){talkRowan();return}
-}
-function talkRowan(){if(quest===0){quest=1;refresh();openModal('A friendly hello','<p class="muted">“Oh, hello there! I’m Rowan, the village field naturalist. I keep notes on the little creatures who share these paths. Would you help me fill in the field guide? Start by meeting a wild creature in Goldenleaf Meadow. They’re curious little things.”</p><button class="primary" id="rowanOkay">I’d love to! ✿</button>');$('rowanOkay').onclick=()=>$('modal').classList.remove('open')}else openModal('Rowan','<p class="muted">“The meadow is full of shy little neighbors. Move gently and let them come to you. Every creature has its own favorite place.”</p>')}
-function openModal(title,html){$('modalTitle').textContent=title;$('modalBody').innerHTML=html;$('modal').classList.add('open')}
-function beginBattle(spawn,index){let name=spawn.name,d=creatures[name],level=rnd(2,4);encounter={name,level,maxHp:d.hp+level*2,hp:d.hp+level*2,index};encounter.hp=encounter.maxHp;active=party[0];if(!active){toast('Choose a companion first!');return}$('battleTitle').textContent=name+' is curious about you!';$('enemyName').textContent=name+' · Lv '+level;$('allyName').textContent=active.name+' · Lv '+active.level;$('battleLog').textContent='A wild '+name+' wandered over. What will you do?';$('battle').classList.add('open');drawBattle()}
-function drawBigCreature(name,id){let c=$(id),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);let d=creatures[name],cx=c.width/2,cy=c.height/2+8;g.fillStyle='#dce9d255';g.beginPath();g.ellipse(cx,cy+30,49,12,0,0,Math.PI*2);g.fill();g.fillStyle=d.color;g.beginPath();g.ellipse(cx,cy,43,35,0,0,Math.PI*2);g.fill();g.fillStyle=d.belly;g.beginPath();g.ellipse(cx,cy+15,25,16,0,0,Math.PI*2);g.fill();g.fillStyle='#40584a';g.beginPath();g.arc(cx-13,cy-5,4,0,Math.PI*2);g.arc(cx+13,cy-5,4,0,Math.PI*2);g.fill();g.strokeStyle='#8d625a';g.lineWidth=2;g.beginPath();g.arc(cx,cy+7,6,0,Math.PI);g.stroke();g.fillStyle=d.accent;g.beginPath();g.arc(cx-26,cy-26,10,0,Math.PI*2);g.arc(cx+26,cy-26,10,0,Math.PI*2);g.fill()}
-function drawBattle(){drawBigCreature(encounter.name,'enemyArt');drawBigCreature(active.name,'allyArt');$('enemyVitals').textContent=encounter.hp+' / '+encounter.maxHp+' VIT';$('allyVitals').textContent=active.hp+' / '+active.maxHp+' VIT';$('enemyHp').style.width=(100*encounter.hp/encounter.maxHp)+'%';$('allyHp').style.width=(100*active.hp/active.maxHp)+'%';$('moveGrid').innerHTML=creatures[active.name].moves.map((m,i)=>'<button class="move" data-move="'+i+'">'+m[0]+'<small>✦ '+m[1]+' power</small></button>').join('');$('moveGrid').querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>attack(Number(b.dataset.move)))}
-function attack(i){if(!encounter)return;let m=creatures[active.name].moves[i],d=creatures[encounter.name];let damage=Math.max(2,m[1]+active.level+rnd(-2,2)-Math.floor(d.def/2));encounter.hp=Math.max(0,encounter.hp-damage);$('battleLog').textContent=active.name+' used '+m[0]+'! It made '+damage+' impact.';if(encounter.hp<=0){active.xp=(active.xp||0)+8;coins+=5;creatureSpawns.splice(encounter.index,1);$('battleLog').textContent=encounter.name+' scampered away. You found 5 little coins and '+active.name+' gained 8 XP.';if(active.xp>=active.level*12){active.xp=0;active.level++;active.maxHp+=3;active.hp=active.maxHp;$('battleLog').textContent+=' '+active.name+' grew to level '+active.level+'!'}$('moveGrid').innerHTML='<button class="primary" id="battleDone" style="grid-column:1/-1">Continue exploring</button>';$('battleDone').onclick=endBattle;drawBattle();return}
-let retaliation=Math.max(1,d.atk+encounter.level-rnd(1,3)-Math.floor(active.def/2));active.hp=Math.max(0,active.hp-retaliation);$('battleLog').textContent+=' '+encounter.name+' answered with a little bump ('+retaliation+' impact).';if(active.hp<=0){active.hp=1;$('battleLog').textContent+=' '+active.name+' needs a rest. You retreat to catch your breath.';$('moveGrid').innerHTML='<button class="primary" id="battleDone" style="grid-column:1/-1">Continue</button>';$('battleDone').onclick=endBattle}drawBattle();refresh()}
-function catchCreature(){if(!encounter)return;if(party.length>=6){$('battleLog').textContent='Your party is full. Visit the field guide to swap companions.';return}let chance=.42+(1-encounter.hp/encounter.maxHp)*.45;if(Math.random()<chance){party.push({name:encounter.name,level:encounter.level,hp:encounter.maxHp,maxHp:encounter.maxHp,atk:creatures[encounter.name].atk,def:creatures[encounter.name].def,xp:0});found++;coins+=2;$('battleLog').textContent=encounter.name+' trusts you! You made a new friend.';creatureSpawns.splice(encounter.index,1);$('moveGrid').innerHTML='<button class="primary" id="battleDone" style="grid-column:1/-1">Welcome, '+encounter.name+'!</button>';$('battleDone').onclick=endBattle;refresh()}else{$('battleLog').textContent=encounter.name+' is still deciding. Maybe try a little more gently.';let d=creatures[encounter.name];active.hp=Math.max(1,active.hp-2);drawBattle();refresh()}}
-function endBattle(){$('battle').classList.remove('open');encounter=null;refresh();toast('The path is waiting for you ✿')}
-function showParty(){openModal('Your creature friends','<p class="muted">Your traveling companions, all together in one place.</p><div class="list">'+party.map((c,i)=>'<div class="creature-card"><span class="art">'+symbol(c.name)+'</span><div><b>'+c.name+'</b><small>'+creatures[c.name].type+' · Lv '+c.level+' · '+c.hp+'/'+c.maxHp+' VIT</small></div>'+(i?'<button class="secondary" data-lead="'+i+'">Lead</button>':'<small>LEAD</small>')+'</div>').join('')+'</div>');$('modalBody').querySelectorAll('[data-lead]').forEach(b=>b.onclick=()=>{let i=Number(b.dataset.lead);[party[0],party[i]]=[party[i],party[0]];refresh();showParty()})}
-function showMap(){openModal('The nearby world','<p class="muted">Three little places are connected by winding paths. Walk to the edge of each area to travel.</p><div class="list"><div class="creature-card"><span class="art">🏡</span><div><b>Sunmeadow Village</b><small>Warm cottages, gardens and friendly neighbors.</small></div></div><div class="creature-card"><span class="art">🌼</span><div><b>Goldenleaf Meadow</b><small>Open grassland where many creatures wander.</small></div></div><div class="creature-card"><span class="art">🌳</span><div><b>Whisperwood</b><small>A quiet forest with unusual little friends.</small></div></div></div>')}
-function showBag(){openModal('Your satchel','<div class="creature-card"><span class="art">🍪</span><div><b>Wild treats</b><small>Friendly offerings for curious creatures.</small></div><b style="margin-left:auto">∞</b></div><div class="creature-card"><span class="art">🧭</span><div><b>Field notebook</b><small>Keep track of your little discoveries.</small></div></div><p class="muted">Coins: '+coins+' · Friends met: '+found+'</p>')}
-function save(){let data={look,player,party,coins,day,found,quest,mapKey};localStorage.setItem('wildlight-save',JSON.stringify(data));toast('Your adventure has been saved ♡')}
-function load(){try{let d=JSON.parse(localStorage.getItem('wildlight-save'));if(d){look=d.look||look;player=d.player||player;party=d.party||[];coins=d.coins||35;day=d.day||1;found=d.found||0;quest=d.quest||0;mapKey=d.mapKey||'village';map=maps[mapKey]||maps.village;return true}}catch(e){}return false}
-function makeChoices(id,arr,key){$(id).innerHTML=arr.map((v,i)=>'<button class="choice '+(look[key]===i?'selected':'')+'" data-choice="'+i+'">'+v+'</button>').join('');$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{look[key]=Number(b.dataset.choice);makeChoices(id,arr,key);drawAvatar($('preview').getContext('2d'),1.25)})}
-makeChoices('skinChoices',['☀','🌤','🌞','🌅'],'skin');makeChoices('hairChoices',['Short','Curly','Wavy','Bun','Fluffy'],'hair');makeChoices('outfitChoices',['Sage','Rose','Sky','Honey','Lilac'],'outfit');drawAvatar($('preview').getContext('2d'),1.25);
-$('start').onclick=()=>{look.name=$('playerName').value.trim()||'Sage';$('custom').classList.remove('open');if(!party.length){party=[{name:'Mosslet',level:3,hp:24,maxHp:24,atk:6,def:5,xp:0}]}buildMap();refresh();toast('Welcome, '+look.name+'!');};
-$('closeModal').onclick=()=>$('modal').classList.remove('open');$('creaturesBtn').onclick=showParty;$('mapBtn').onclick=showMap;$('bagBtn').onclick=showBag;$('saveBtn').onclick=save;$('catchBtn').onclick=catchCreature;$('runBtn').onclick=endBattle;
-$('battleClose').onclick=endBattle;
-window.addEventListener('keydown',e=>{let k=e.key.toLowerCase();if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();if(k==='escape'){$('modal').classList.remove('open');return}if(k==='w'||k==='arrowup')tryMove(0,-1);if(k==='s'||k==='arrowdown')tryMove(0,1);if(k==='a'||k==='arrowleft')tryMove(-1,0);if(k==='d'||k==='arrowright')tryMove(1,0);if(k===' '||k==='enter'){let n=decoration.find(o=>o.type==='npc'&&Math.abs(o.x-player.x)+Math.abs(o.y-player.y)<=2);if(n)talkRowan()}});
-document.querySelectorAll('[data-dir]').forEach(b=>{let dx=0,dy=0;let dir=b.dataset.dir;if(dir==='up')dy=-1;if(dir==='down')dy=1;if(dir==='left')dx=-1;if(dir==='right')dx=1;let timer;const start=e=>{e.preventDefault();tryMove(dx,dy);timer=setInterval(()=>tryMove(dx,dy),170)},stop=()=>clearInterval(timer);b.addEventListener('pointerdown',start);b.addEventListener('pointerup',stop);b.addEventListener('pointerleave',stop);b.addEventListener('pointercancel',stop)});
-world.addEventListener('pointerdown',e=>{if($('custom').classList.contains('open'))return;let r=world.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;let best=null,bd=1e9;for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){let p=iso(player.x+dx,player.y+dy),d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;best=[dx,dy]}}if(best&&bd<75)tryMove(best[0],best[1])});
-function tick(t){if(t-lastTime>145){if(keys.up)tryMove(0,-1);else if(keys.down)tryMove(0,1);else if(keys.left)tryMove(-1,0);else if(keys.right)tryMove(1,0);lastTime=t}for(let c of creatureSpawns){if(Math.random()<.002){let dx=rnd(-1,1),dy=rnd(-1,1),nx=c.x+dx,ny=c.y+dy;if(nx>1&&nx<22&&ny>1&&ny<14&&!obstacles.has(nx+','+ny)){c.x=nx;c.y=ny}}}render();if(toastTimer>0){toastTimer-=1/60;if(toastTimer<=0)$('toast').classList.remove('show')}requestAnimationFrame(tick)}
-let saved=load();if(saved){$('playerName').value=look.name||'Sage';$('custom').classList.remove('open');buildMap();refresh();toast('Welcome back, '+look.name+'!')}else{buildMap();refresh()}
-requestAnimationFrame(tick);
-})();
-</script></body></html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#dce7d5">
+<meta name="description" content="Wildlight is a cozy creature-collecting adventure across five connected regions.">
+<title>Wildlight — A Creature Adventure</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="game-shell">
+ <header class="topbar">
+  <div class="brand"><div class="brand-mark">✿</div><div><div class="brand-name">WILDLIGHT</div><div class="brand-sub">A CREATURE ADVENTURE</div></div></div>
+  <div class="top-status"><span class="status-chip" id="trainerLabel">Explorer</span><span class="status-chip">✦ <b id="glowCount">240</b></span><span class="status-chip">◉ <b id="lureCount">8</b></span></div>
+ </header>
+ <main class="game-layout">
+  <aside class="left-rail">
+   <div class="rail-label">YOUR JOURNEY</div>
+   <nav class="nav-stack">
+    <button class="nav-button active" data-panel="map"><span class="nav-icon">⌖</span>Explore</button>
+    <button class="nav-button" data-panel="guide"><span class="nav-icon">▤</span>Field Guide</button>
+    <button class="nav-button" data-panel="party"><span class="nav-icon">❀</span>Creature Party</button>
+    <button class="nav-button" data-panel="map"><span class="nav-icon">◇</span>World Map</button>
+   </nav>
+   <div class="quest-card"><strong>FIELD NOTE 01</strong><p>Meet the wild residents of Sunmeadow. A whole world is waiting beyond the village path.</p></div>
+  </aside>
+  <section class="stage">
+   <div class="stage-heading"><div><h1 id="regionName">Sunmeadow</h1><p id="regionSubtitle">Warm fields & sleepy villages</p></div><div class="weather">☀ Clear skies</div></div>
+   <div class="world-frame">
+    <canvas id="world" aria-label="Isometric creature adventure world"></canvas>
+    <div class="world-hud"><span class="hud-pill">DAY 03 · <span id="clockLabel">09:42</span></span><span class="hud-pill">✧ <span id="stepsLabel">Explore freely</span></span></div>
+    <div class="toast" id="toast"></div>
+    <div class="interact-hint" id="interactHint">E / INTERACT</div>
+   </div>
+   <div class="action-row"><div class="action-copy">WASD / ARROWS TO MOVE · WALK UP TO A CREATURE TO INTERACT</div><div class="action-buttons"><button class="soft-button" data-panel="guide">Field Guide</button><button class="soft-button" data-panel="party">Party</button><button class="primary-button" id="saveBtn">Save Journey</button></div></div>
+  </section>
+  <aside class="right-rail">
+   <div class="party-head"><h2>Your Creatures</h2><small id="partyCount">0/6</small></div>
+   <div class="party-list" id="partyList"></div>
+   <div class="guide-card"><strong>FIELD GUIDE</strong><p><span id="guideCount">0/36</span> species discovered</p><div class="progress-track"><i id="guideProgress"></i></div></div>
+   <p id="saveStatus" style="font-size:9px;color:#829487;font-weight:900">Auto-save on</p>
+  </aside>
+ </main>
+ <div class="mobile-controls">
+  <div class="stick" id="stick" aria-label="Movement joystick"><div class="stick-nub" id="stickNub"></div></div>
+  <div class="mobile-actions"><button class="interact-mobile" id="interactBtn">INTERACT</button><button data-panel="party">PARTY</button></div>
+ </div>
+ <footer class="footerbar"><span>EXPLORE · DISCOVER · BATTLE · COLLECT</span><span>Mobile-first controls / keyboard support</span></footer>
+</div>
+
+<div class="overlay" id="startScreen">
+ <div class="modal">
+  <h2>Begin your Wildlight journey</h2><p class="modal-sub">Create your explorer, choose a first companion, and set out into a world full of wild creatures.</p>
+  <div class="form-grid">
+   <div class="field"><label for="trainerName">EXPLORER NAME</label><input id="trainerName" maxlength="16" value="Rin"></div>
+   <div class="field"><label for="starterChoice">FIRST COMPANION</label><select id="starterChoice"><option value="mosslet">Mosslet · Leaf</option><option value="cindercub">Cindercub · Ember</option><option value="bubbloon">Bubbloon · Tide</option></select></div>
+   <div class="field"><label for="skinColor">SKIN TONE</label><input id="skinColor" type="color" value="#D49B7D"></div>
+   <div class="field"><label for="hairColor">HAIR COLOR</label><input id="hairColor" type="color" value="#493A36"></div>
+   <div class="field"><label for="outfitColor">OUTFIT COLOR</label><input id="outfitColor" type="color" value="#E6A58F"></div>
+   <div class="field"><label>YOUR EXPLORER</label><div id="avatarPreview" style="height:43px;border-radius:12px;background:linear-gradient(90deg,#e4eddc,#fff8e9);display:flex;align-items:center;justify-content:center;font-size:20px">◉</div></div>
+  </div>
+  <div class="modal-actions"><button class="soft-button hidden" id="continueBtn">Continue Saved Game</button><button class="primary-button" id="newGameBtn">Start Exploring →</button></div>
+ </div>
+</div>
+
+<div class="overlay hidden" id="battleOverlay">
+ <div class="modal battle-modal">
+  <h2>Wild encounter</h2><p class="modal-sub">A creature crossed your path. What will you do?</p>
+  <canvas class="battle-art" id="battleArt"></canvas>
+  <div class="battle-bars">
+   <div class="battle-stat"><b id="wildName">Wild creature</b><small id="wildLevel">Lv. 4</small><div class="hp-track"><i id="wildHp" style="width:100%"></i></div></div>
+   <div class="battle-stat"><b id="allyName">Your companion</b><small id="allyLevel">Lv. 5</small><div class="hp-track"><i id="allyHp" style="width:100%"></i></div></div>
+  </div>
+  <div class="battle-message" id="battleMessage">A wild creature appeared!</div>
+  <div class="move-grid" id="moveButtons"></div>
+  <div class="battle-actions"><button class="soft-button" id="catchBtn">Use Lure (8)</button><button class="soft-button" id="runBtn">Step Away</button></div>
+ </div>
+</div>
+
+<div class="overlay hidden" id="infoOverlay">
+ <div class="modal panel-modal">
+  <div class="panel-header"><h2 id="panelTitle">Field Guide</h2><button class="close-button" id="closePanel">×</button></div>
+  <div id="panelContent"></div>
+ </div>
+</div>
+<script type="module" src="./src/game.js"></script>
+</body>
+</html>
