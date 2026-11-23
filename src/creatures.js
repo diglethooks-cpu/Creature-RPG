@@ -53,6 +53,12 @@ export const CREATURES = [
   {id:"mireling",name:"Mireling",type:"TIDE",region:"whisperwood",rarity:"Uncommon",shape:"frog",color:"#79A99A",accent:"#D2E1B4",hp:49,atk:14,def:15,spd:11,learn:["Bubble Pop","Root Hug"]},
   {id:"bramblet",name:"Bramblet",type:"LEAF",region:"emberfall",rarity:"Common",shape:"hedgehog",color:"#9B8F67",accent:"#E3C68D",hp:42,atk:16,def:14,spd:9,learn:["Bramble Burst","Seed Toss"]},
   {id:"skydoodle",name:"Skydoodle",type:"MIND",region:"sunmeadow",rarity:"Rare",shape:"bird",color:"#B8A6CE",accent:"#F2DCEB",hp:38,atk:16,def:10,spd:24,learn:["Mind Spark","Wingbeat"]}
+  ,{id:"fernowl",name:"Fernowl",type:"LEAF",region:"whisperwood",rarity:"Uncommon",shape:"owl",color:"#6E9875",accent:"#CDE0AE",hp:48,atk:15,def:16,spd:13,learn:["Leaf Flick","Wingbeat","Bramble Burst"]}
+  ,{id:"copperscale",name:"Copperscale",type:"VOLT",region:"emberfall",rarity:"Uncommon",shape:"lizard",color:"#C78E55",accent:"#F2D18A",hp:46,atk:19,def:13,spd:16,learn:["Sparkle Zap","Tunnel Dash"]}
+  ,{id:"snowbell",name:"Snowbell",type:"FROST",region:"frostveil",rarity:"Uncommon",shape:"float",color:"#B8D3DF",accent:"#F5FCFA",hp:45,atk:15,def:16,spd:17,learn:["Snowball","Lullaby"]}
+  ,{id:"tidekip",name:"Tidekip",type:"TIDE",region:"tideglass",rarity:"Common",shape:"frog",color:"#73B7B8",accent:"#D7EAC8",hp:42,atk:13,def:14,spd:14,learn:["Bubble Pop","Quick Hop"]}
+  ,{id:"duskram",name:"Duskram",type:"SHADE",region:"whisperwood",rarity:"Rare",shape:"bear",color:"#80749B",accent:"#D9CBE4",hp:70,atk:22,def:20,spd:8,learn:["Dusk Pounce","Stone Roll","Mind Spark"]}
+
 ];
 
 export const MOVES = {
