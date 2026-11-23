@@ -31,7 +31,7 @@ function buildWorld(){
   {kind:"bridge",x:53,z:17,scale:1},{kind:"crystal",x:50,z:46,scale:1.1}
  );
  for(const o of state.objects)if(["house","windmill"].includes(o.kind)){for(let dx=0;dx<2;dx++)for(let dz=0;dz<2;dz++)state.blocked.add(tileKey(o.x+dx,o.z+dz));}
- for(const r of REGIONS){const list=CREATURES.filter(c=>c.region===r.id);for(let i=0;i<11;i++){const species=pick(list);let x,z,tries=0;do{x=rand(r.x0+1,r.x1-1);z=rand(r.z0+1,r.z1-1);tries++;}while((waterAt(x,z)||state.blocked.has(tileKey(x,z))||pathNear(x,z))&&tries<40);state.creatures.push({id:species.id,x,z,homeX:x,homeZ:z,hp:species.hp,level:Math.floor(rand(3,8)),phase:rand(0,7),dir:rand(0,Math.PI*2),wander:rand(1,5),visible:true});}}
+ for(const r of REGIONS){const list=CREATURES.filter(c=>c.region===r.id);for(let i=0;i<11;i++){const species=pick(list);let x,z,tries=0;do{x=rand(r.x0+1,r.x1-1);z=rand(r.z0+1,r.z1-1);tries++;}while((waterAt(x,z)||state.blocked.has(tileKey(x,z))||pathNear(x,z))&&tries<40);state.creatures.push({id:species.id,x,z,homeX:x,homeZ:z,hp:species.hp,level:Math.floor(rand(3,8)),phase:rand(0,7),dir:rand(0,Math.PI*2),wander:rand(1,5),visible:true,respawn:0});}}
 }
 buildWorld();
 
@@ -131,7 +131,7 @@ function tryMove(dt){
 }
 function isBlocked(x,z){if(x<.5||z<.5||x>WORLD-1.5||z>WORLD-1.5)return true;if(waterAt(x,z)&&!pathNear(x,z))return true;return state.blocked.has(tileKey(x,z));}
 function updateCreatures(dt){
- for(const c of state.creatures){c.phase+=dt*2.2;c.wander-=dt;if(c.wander<=0){c.dir=rand(0,Math.PI*2);c.wander=rand(2,5);}
+ for(const c of state.creatures){if(!c.visible){c.respawn-=dt;if(c.respawn<=0){c.visible=true;c.hp=speciesById(c.id).hp;c.x=c.homeX;c.z=c.homeZ;c.respawn=0;}continue;}c.phase+=dt*2.2;c.wander-=dt;if(c.wander<=0){c.dir=rand(0,Math.PI*2);c.wander=rand(2,5);}
   const nx=c.x+Math.cos(c.dir)*dt*.32,nz=c.z+Math.sin(c.dir)*dt*.32,r=regionAt(c.homeX,c.homeZ);
   if(nx>r.x0+.5&&nx<r.x1-.5&&nz>r.z0+.5&&nz<r.z1-.5&&!isBlocked(nx,nz)){c.x=nx;c.z=nz;}else{c.dir+=Math.PI*.7;c.wander=.5;}
  }
@@ -169,9 +169,9 @@ function playerMove(move){
 }
 function enemyTurn(){const b=state.battle,p=state.party[state.active];if(!b||!p)return;if(p.hp<=0){const next=state.party.findIndex(c=>c.hp>0);if(next<0){state.party.forEach(c=>c.hp=Math.max(1,Math.round(c.maxHp*.45)));endBattle("Your companions need a rest. They recovered at the village.");return;}state.active=next;}
  const active=state.party[state.active],move=pick(b.species.learn);const d=damage(makeCreature(b.wild.id,b.wild.level),active,move);active.hp=Math.max(0,active.hp-d);b.message=b.species.name+" used "+move+"! Your "+speciesById(active.id).name+" took "+d+" damage.";b.locked=false;renderBattle();updateUI();}
-function winBattle(){const b=state.battle,p=state.party[state.active];if(p){p.xp+=12+b.wild.level*3;if(p.xp>=p.level*18){p.xp-=p.level*18;p.level++;p.maxHp+=4;p.hp=Math.min(p.maxHp,p.hp+10);p.atk+=2;p.def+=1;const s=speciesById(p.id);if(s.evolvesTo&&p.level>=s.evolveAt){p.id=s.evolvesTo;const evolved=speciesById(p.id);p.maxHp=evolved.hp;p.hp=evolved.hp;p.atk=evolved.atk;p.def=evolved.def;p.spd=evolved.spd;toast(s.name+" evolved into "+evolved.name+"!");}}}
+function winBattle(){const b=state.battle,p=state.party[state.active];b.wild.visible=false;b.wild.respawn=45;if(p){p.xp+=12+b.wild.level*3;if(p.xp>=p.level*18){p.xp-=p.level*18;p.level++;p.maxHp+=4;p.hp=Math.min(p.maxHp,p.hp+10);p.atk+=2;p.def+=1;const s=speciesById(p.id);if(s.evolvesTo&&p.level>=s.evolveAt){p.id=s.evolvesTo;const evolved=speciesById(p.id);p.maxHp=evolved.hp;p.hp=evolved.hp;p.atk=evolved.atk;p.def=evolved.def;p.spd=evolved.spd;toast(s.name+" evolved into "+evolved.name+"!");}}}
  b.message="You won! "+(p?speciesById(p.id).name+" gained experience.":"");b.locked=true;renderBattle();setTimeout(()=>endBattle(b.message),1100);}
-function catchWild(){const b=state.battle;if(!b||b.locked||state.lures<=0)return;state.lures--;const s=b.species,ratio=b.wild.hp/s.hp,rarity=s.rarity==="Rare"?.13:s.rarity==="Uncommon"?.06:0,chance=clamp(.72-ratio*.55-rarity,.12,.78);if(Math.random()<chance){const caught=makeCreature(s.id,b.wild.level);caught.hp=Math.max(1,b.wild.hp);state.caught.add(s.id);if(state.party.length<6)state.party.push(caught);else state.collection.push(caught);state.glow+=s.rarity==="Rare"?45:18;b.message=s.name+" joined your collection!";b.locked=true;renderBattle();updateUI();setTimeout(()=>endBattle(b.message),1000);}else{b.message=s.name+" slipped away from the lure!";renderBattle();setTimeout(enemyTurn,550);}save();}
+function catchWild(){const b=state.battle;if(!b||b.locked||state.lures<=0)return;state.lures--;const s=b.species,ratio=b.wild.hp/s.hp,rarity=s.rarity==="Rare"?.13:s.rarity==="Uncommon"?.06:0,chance=clamp(.72-ratio*.55-rarity,.12,.78);if(Math.random()<chance){b.wild.visible=false;b.wild.respawn=45;const caught=makeCreature(s.id,b.wild.level);caught.hp=Math.max(1,b.wild.hp);state.caught.add(s.id);if(state.party.length<6)state.party.push(caught);else state.collection.push(caught);state.glow+=s.rarity==="Rare"?45:18;b.message=s.name+" joined your collection!";b.locked=true;renderBattle();updateUI();setTimeout(()=>endBattle(b.message),1000);}else{b.message=s.name+" slipped away from the lure!";renderBattle();setTimeout(enemyTurn,550);}save();}
 function runAway(){if(state.battle)endBattle("You stepped away safely.");}
 function endBattle(message){$("battleOverlay").classList.add("hidden");state.battle=null;updateUI();toast(message);save();}
 $("catchBtn").addEventListener("click",catchWild);$("runBtn").addEventListener("click",runAway);
