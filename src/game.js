@@ -68,7 +68,7 @@ function drawWorld(){
  for(const c of state.creatures){if(!c.visible)continue;const q=iso(c.x+.5,c.z+.5);if(q.x-cam.x>-100&&q.x-cam.x<w+100&&q.y-cam.y>-100&&q.y-cam.y<h+100)renderables.push({y:q.y,draw:()=>drawCreature(c,q.x-cam.x,q.y-cam.y+Math.sin(state.elapsed*3+c.phase)*3,.8)});}
  const pq=iso(state.player.x+.5,state.player.z+.5);renderables.push({y:pq.y+.1,draw:()=>drawPlayer(pq.x-cam.x,pq.y-cam.y)});
  renderables.sort((a,b)=>a.y-b.y);for(const r of renderables)r.draw();
- const r=regionAt(state.player.x,state.player.z);$("regionName").textContent=r.name;$("regionSubtitle").textContent=r.subtitle;
+ const r=regionAt(state.player.x,state.player.z);$("regionName").textContent=r.name;$("regionSubtitle").textContent=r.subtitle;const hh=String(Math.floor(state.minutes/60)).padStart(2,"0"),mm=String(Math.floor(state.minutes%60)).padStart(2,"0");$("clockLabel").textContent=hh+":"+mm;
  const near=nearestCreature();$("interactHint").classList.toggle("visible",!!near);
 }
 function drawObject(o,x,y){
@@ -82,31 +82,31 @@ function drawObject(o,x,y){
  else if(o.kind==="crystal"){ctx.fillStyle="#9AC6D2";ctx.beginPath();ctx.moveTo(x,y-54*s);ctx.lineTo(x+18*s,y-15*s);ctx.lineTo(x+8*s,y+1*s);ctx.lineTo(x-13*s,y+1*s);ctx.lineTo(x-21*s,y-15*s);ctx.closePath();ctx.fill();ctx.strokeStyle="#E4F4F1";ctx.lineWidth=3;ctx.stroke();}
  ctx.restore();
 }
-function drawCreature(c,x,y,scale=1){
+function drawCreature(c,x,y,scale=1,g=g){
  const s=speciesById(c.id);if(!s)return;const sc=scale*(s.shape==="bear"?1.1:1);
- ctx.save();ctx.translate(x,y);ctx.scale(sc,sc);ctx.fillStyle="#40583A35";ctx.beginPath();ctx.ellipse(0,4,25,8,0,0,Math.PI*2);ctx.fill();
- const body=(cx,cy,rx,ry,col)=>{ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();};
+ g.save();g.translate(x,y);g.scale(sc,sc);g.fillStyle="#40583A35";g.beginPath();g.ellipse(0,4,25,8,0,0,Math.PI*2);g.fill();
+ const body=(cx,cy,rx,ry,col)=>{g.beginPath();g.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);g.fillStyle=col;g.fill();};
  const shape=s.shape;
  if(shape==="moth"||shape==="bird"){body(-18,-12,18,13,s.accent);body(18,-12,18,13,s.accent);}
  if(shape==="rabbit"||shape==="cat"||shape==="fox"||shape==="cub"||shape==="bear"){body(-13,-31,8,16,s.color);body(13,-31,8,16,s.color);}
  if(shape==="sprout"){body(-11,-43,7,17,s.accent);body(11,-43,7,17,s.accent);body(0,-50,13,7,s.color);}
- if(shape==="rock"){ctx.beginPath();ctx.moveTo(-24,-13);ctx.lineTo(-17,-42);ctx.lineTo(0,-52);ctx.lineTo(20,-39);ctx.lineTo(25,-13);ctx.closePath();ctx.fillStyle=s.color;ctx.fill();}
+ if(shape==="rock"){g.beginPath();g.moveTo(-24,-13);g.lineTo(-17,-42);g.lineTo(0,-52);g.lineTo(20,-39);g.lineTo(25,-13);g.closePath();g.fillStyle=s.color;g.fill();}
  else if(shape==="float"||shape==="wisp"){body(0,-25,24,24,s.color);body(-10,-49,10,10,s.accent);body(10,-49,10,10,s.accent);}
- else if(shape==="fish"){body(0,-25,25,16,s.color);ctx.beginPath();ctx.moveTo(21,-25);ctx.lineTo(39,-40);ctx.lineTo(37,-10);ctx.closePath();ctx.fillStyle=s.accent;ctx.fill();}
+ else if(shape==="fish"){body(0,-25,25,16,s.color);g.beginPath();g.moveTo(21,-25);g.lineTo(39,-40);g.lineTo(37,-10);g.closePath();g.fillStyle=s.accent;g.fill();}
  else if(shape==="turtle"){body(0,-24,28,20,s.color);body(0,-29,19,14,s.accent);}
- else if(shape==="deer"){body(0,-25,23,20,s.color);ctx.strokeStyle=s.accent;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-9,-43);ctx.lineTo(-16,-59);ctx.lineTo(-23,-63);ctx.moveTo(9,-43);ctx.lineTo(16,-59);ctx.lineTo(23,-63);ctx.stroke();}
+ else if(shape==="deer"){body(0,-25,23,20,s.color);g.strokeStyle=s.accent;g.lineWidth=5;g.beginPath();g.moveTo(-9,-43);g.lineTo(-16,-59);g.lineTo(-23,-63);g.moveTo(9,-43);g.lineTo(16,-59);g.lineTo(23,-63);g.stroke();}
  else if(shape==="seal"||shape==="frog"||shape==="mole"||shape==="salamander"||shape==="hedgehog"||shape==="owl"||shape==="lizard"){body(0,-25,25,21,s.color);}
  else {body(0,-25,24,23,s.color);}
- if(shape==="hedgehog"){ctx.fillStyle=s.accent;for(let i=0;i<7;i++){ctx.beginPath();ctx.moveTo(-20+i*6,-40);ctx.lineTo(-17+i*6,-56);ctx.lineTo(-10+i*6,-40);ctx.fill();}}
+ if(shape==="hedgehog"){g.fillStyle=s.accent;for(let i=0;i<7;i++){g.beginPath();g.moveTo(-20+i*6,-40);g.lineTo(-17+i*6,-56);g.lineTo(-10+i*6,-40);g.fill();}}
  if(shape==="owl"){body(-12,-45,9,10,s.accent);body(12,-45,9,10,s.accent);}
  if(shape==="cub"||shape==="bear"||shape==="fox"||shape==="cat"){body(-18,-44,10,9,s.color);body(18,-44,10,9,s.color);}
  body(0,-24,24,22,s.color);
  body(-8,-29,3.5,4.5,"#34433D");body(8,-29,3.5,4.5,"#34433D");
- ctx.beginPath();ctx.arc(0,-17,4,0,Math.PI);ctx.strokeStyle="#594B45";ctx.lineWidth=1.5;ctx.stroke();
+ g.beginPath();g.arc(0,-17,4,0,Math.PI);g.strokeStyle="#594B45";g.lineWidth=1.5;g.stroke();
  if(s.type==="EMBER"){body(0,-55,5,7,"#F6C27A");}
- if(s.type==="LEAF"){ctx.strokeStyle="#E4EBC0";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,-51);ctx.quadraticCurveTo(8,-64,16,-59);ctx.stroke();}
- if(s.type==="FROST"){ctx.fillStyle="#F3FAF7";ctx.beginPath();ctx.arc(-15,-47,4,0,Math.PI*2);ctx.arc(16,-46,3,0,Math.PI*2);ctx.fill();}
- ctx.restore();
+ if(s.type==="LEAF"){g.strokeStyle="#E4EBC0";g.lineWidth=3;g.beginPath();g.moveTo(0,-51);g.quadraticCurveTo(8,-64,16,-59);g.stroke();}
+ if(s.type==="FROST"){g.fillStyle="#F3FAF7";g.beginPath();g.arc(-15,-47,4,0,Math.PI*2);g.arc(16,-46,3,0,Math.PI*2);g.fill();}
+ g.restore();
 }
 function drawPlayer(x,y){
  ctx.save();ctx.translate(x,y);ctx.fillStyle="#40583A35";ctx.beginPath();ctx.ellipse(0,0,16,6,0,0,Math.PI*2);ctx.fill();
@@ -150,13 +150,13 @@ const stickEnd=e=>{if(stickPointer===e.pointerId){stickPointer=null;state.input.
 stick.addEventListener("pointerup",stickEnd);stick.addEventListener("pointercancel",stickEnd);
 canvas.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;const r=canvas.getBoundingClientRect(),sx=e.clientX-r.left+state.camera.x,sy=e.clientY-r.top+state.camera.y,t=worldFromScreen(sx,sy);state.target={x:clamp(t.x,1,WORLD-2),z:clamp(t.z,1,WORLD-2)};});
 function typeMult(moveType,targetType){if(TYPES[moveType]?.strong===targetType)return 1.35;if(TYPES[moveType]?.weak===targetType)return .72;return 1;}
-function startBattle(c){const s=speciesById(c.id);state.battle={wild:c,species:s,turn:"player",message:"A wild "+s.name+" appeared!",locked:false};state.seen.add(c.id);state.target=null;state.input.x=0;state.input.y=0;renderBattle();$("battleOverlay").classList.remove("hidden");}
+function startBattle(c){const s=speciesById(c.id);state.battle={wild:c,species:s,turn:"player",message:"A wild "+s.name+" appeared!",locked:false};state.seen.add(c.id);state.target=null;state.input.x=0;state.input.y=0;$("battleOverlay").classList.remove("hidden");renderBattle();}
 function renderBattle(){
  const b=state.battle;if(!b)return;const s=b.species,p=state.party[state.active];$("wildName").textContent=s.name;$("wildLevel").textContent="Lv. "+b.wild.level+" · "+TYPES[s.type].label;$("wildHp").style.width=(b.wild.hp/s.hp*100)+"%";$("battleMessage").textContent=b.message;
  $("allyName").textContent=p?speciesById(p.id).name:"No companion";$("allyLevel").textContent=p?"Lv. "+p.level:"";$("allyHp").style.width=p?(p.hp/p.maxHp*100)+"%":"0%";
  const art=$("battleArt"),c=art.getContext("2d");art.width=art.clientWidth*2;art.height=art.clientHeight*2;c.scale(2,2);c.clearRect(0,0,art.clientWidth,art.clientHeight);
  c.fillStyle="#D8E7D0";c.fillRect(0,0,art.clientWidth,art.clientHeight);c.fillStyle="#A6C28A";c.beginPath();c.ellipse(art.clientWidth*.5,art.clientHeight*.72,art.clientWidth*.4,22,0,0,Math.PI*2);c.fill();
- const old=ctx;ctx=c;drawCreature({...b.wild,id:s.id,phase:0},art.clientWidth*.68,art.clientHeight*.7,1.5);if(p)drawCreature({id:p.id,phase:0},art.clientWidth*.28,art.clientHeight*.76,1.15);ctx=old;
+ drawCreature({...b.wild,id:s.id,phase:0},art.clientWidth*.68,art.clientHeight*.7,1.5,c);if(p)drawCreature({id:p.id,phase:0},art.clientWidth*.28,art.clientHeight*.76,1.15,c);
  $("moveButtons").innerHTML=(p?p.moves:[]).map(m=>{const d=MOVES[m];return '<button class="move-button" data-move="'+m+'"><b>'+m+'</b><small>'+TYPES[d.type].label+' · '+d.power+' power</small></button>';}).join("");
  document.querySelectorAll("[data-move]").forEach(btn=>btn.addEventListener("click",()=>playerMove(btn.dataset.move)));
  $("catchBtn").disabled=state.lures<=0;$("catchBtn").textContent="Use Lure ("+state.lures+")";
