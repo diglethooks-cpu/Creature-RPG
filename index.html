@@ -57,7 +57,7 @@ const maps={
  wood:{name:'Whisperwood',sub:'Dappled sunlight and secrets beneath old trees.',theme:'wood',spawn:[2,11],exits:[{x:1,y:11,to:'meadow',tx:20,ty:8,label:'Goldenleaf Meadow'}]}
 };
 let mapKey='village',map=maps[mapKey];
-const iso=(x,y)=>({x:W/2+(x-y)*32,y:110+(x+y)*16});
+let cameraX=0,cameraY=0;const iso=(x,y)=>({x:W/2+(x-y)*32-cameraX,y:110+(x+y)*16-cameraY});
 const rnd=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 function toast(s){$('toast').textContent=s;$('toast').classList.add('show');toastTimer=2.2}
 function drawDiamond(x,y,fill,stroke){let p=iso(x,y);ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+32,p.y+16);ctx.lineTo(p.x,p.y+32);ctx.lineTo(p.x-32,p.y+16);ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
@@ -92,7 +92,7 @@ let count=mapKey==='meadow'?7:mapKey==='wood'?6:2;let available=mapKey==='meadow
 for(let i=0;i<count;i++){let x,y,tries=0;do{x=rnd(3,20);y=rnd(3,13);tries++}while((obstacles.has(x+','+y)||decoration.some(o=>o.x===x&&o.y===y&&o.type==='house'))&&tries<50);creatureSpawns.push({name:available[rnd(0,available.length-1)],x,y,phase:Math.random()*6.28,roam:0})}
 }
 function changeMap(k,x,y){mapKey=k;map=maps[k];player.x=x;player.y=y;player.step=0;buildMap();$('area').textContent=map.name;$('subtitle').textContent=map.sub;$('regionPill').textContent=map.name.toUpperCase();toast('Arrived at '+map.name)}
-function render(){ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,mapKey==='wood'?'#c9dfbf':'#d8e9c8');sky.addColorStop(1,'#a8ca94');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+function render(){cameraX=Math.max(0,Math.min(256,(W/2+(player.x-player.y)*32)-W/2));cameraY=Math.max(0,Math.min(78,(110+(player.x+player.y)*16)-H*.55));ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,mapKey==='wood'?'#c9dfbf':'#d8e9c8');sky.addColorStop(1,'#a8ca94');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
 for(let y=0;y<16;y++)for(let x=0;x<24;x++){let p=iso(x,y);drawDiamond(x,y,terrain(x,y),'#91b67f55');if(mapKey==='meadow'&&((x*3+y*5)%23===0))drawDiamond(x,y,'#d8dca1')}
 let actors=[];for(let d of decoration)actors.push({...d,depth:d.x+d.y});for(let c of creatureSpawns)actors.push({type:'creature',...c,depth:c.x+c.y+.1});actors.push({type:'player',depth:player.x+player.y+.2});
 actors.sort((a,b)=>a.depth-b.depth);
