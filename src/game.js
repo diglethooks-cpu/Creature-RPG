@@ -82,7 +82,7 @@ function drawObject(o,x,y){
  else if(o.kind==="crystal"){ctx.fillStyle="#9AC6D2";ctx.beginPath();ctx.moveTo(x,y-54*s);ctx.lineTo(x+18*s,y-15*s);ctx.lineTo(x+8*s,y+1*s);ctx.lineTo(x-13*s,y+1*s);ctx.lineTo(x-21*s,y-15*s);ctx.closePath();ctx.fill();ctx.strokeStyle="#E4F4F1";ctx.lineWidth=3;ctx.stroke();}
  ctx.restore();
 }
-function drawCreature(c,x,y,scale=1,g=g){
+function drawCreature(c,x,y,scale=1,g=ctx){
  const s=speciesById(c.id);if(!s)return;const sc=scale*(s.shape==="bear"?1.1:1);
  g.save();g.translate(x,y);g.scale(sc,sc);g.fillStyle="#40583A35";g.beginPath();g.ellipse(0,4,25,8,0,0,Math.PI*2);g.fill();
  const body=(cx,cy,rx,ry,col)=>{g.beginPath();g.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);g.fillStyle=col;g.fill();};
