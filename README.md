@@ -1,22 +1,25 @@
-# Wildlight — Creature RPG
+# Wildlight — A Cozy Creature Adventure
 
-An original creature-collecting adventure for desktop and mobile browsers.
+Wildlight is an original creature-collecting RPG prototype designed for desktop and mobile browsers.
 
-## Play locally
+## Run it
 
-Open `index.html` in a modern browser. Progress is saved in that browser on that device.
+Open `index.html` in a modern browser, or publish the repository with GitHub Pages. Save data is stored locally in the browser on the device where you play.
 
-## Publish a playable web link
+## Current build
 
-A GitHub Actions workflow is included at `.github/workflows/deploy.yml`. In the repository, open **Settings → Pages** and set the build/deployment source to **GitHub Actions**. The workflow will then publish the site after a push to `main` (or when manually run from the Actions tab).
+The current rebuild moves the project toward a soft, cozy isometric adventure:
 
-## Current prototype features
+- Isometric, hand-drawn canvas world with layered scenery, cottages, trees, flowers, rocks, and soft colors
+- Customizable explorer: name, skin tone, hair, and outfit
+- Three connected areas: Sunmeadow Village, Goldenleaf Meadow, and Whisperwood
+- Original creatures visibly roaming the environment
+- Walk up to creatures to begin encounters
+- Turn-based creature battles, individual moves, recruitment, experience, and leveling
+- Rowan NPC conversation and an introductory field-guide quest
+- Party management, satchel, region guide, and local save/load
+- Keyboard controls, touch D-pad, and tap-to-walk support
 
-- Canvas-based tile world with keyboard and touch movement
-- Sunmeadow Village, Goldenleaf Meadow, Whisperwood, Stillwater Lake, and Frostpeak Pass
-- Original creature roster and three starter companions
-- Random wild encounters, turn-based moves, recruitment charms, and leveling
-- NPC conversations, a starter quest, party management, and satchel
-- Region map, local save/load, and mobile-friendly layout
+## Development notes
 
-This is an early playable prototype. Features are still being expanded and need real-device playtesting.
+This is an actively developing prototype, not a finished commercial game. The current focus is improving the isometric presentation, creature animation and behaviors, battle depth, world content, and mobile playtesting.
